@@ -19,4 +19,8 @@ export default class EventRepository {
       throw Error(err)
     })
   }
+
+  updateEvent(event: Event): Promise<boolean> {
+    return this.collection.replaceOne({ id: event.id }, event).then((result) => result.matchedCount == 1)
+  }
 }

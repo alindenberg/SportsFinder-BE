@@ -28,4 +28,17 @@ router.get('/events/:eventId', async (req, res) => {
   }
 })
 
+router.put('/events/:eventId', async (req, res) => {
+  try {
+    await controller.updateEvent(req).then((foundEvent) => {
+      if (!foundEvent) {
+        res.status(404).send(format_error_message(`Didn't find event with id ${req.params.eventId} to update.`))
+      }
+      res.sendStatus(200)
+    })
+  } catch (err) {
+    res.status(400).send(format_error(err))
+  }
+})
+
 export default router

@@ -1,34 +1,25 @@
 import uuidv4 from 'uuid/v4'
-var moment = require('moment-timezone');
-import EventRepository from './repository'
+import EventService from './service'
 import Event, { Location } from './models'
+import EventRepository from './repository'
 
 export default class {
   repository: EventRepository
+  service: EventService
 
   constructor() {
     this.repository = new EventRepository()
+    this.service = new EventService()
   }
 
   createEvent(req: any): Promise<String> {
-    const bodyLocation = req.body.location
-    const location = new Location(
-      bodyLocation.name,
-      bodyLocation.zipCode,
-      bodyLocation.streetAddress,
-      bodyLocation.city,
-      bodyLocation.state)
-
-    const event = new Event(
-      uuidv4().toString(),
-      req.body.name,
-      location,
-      moment(req.body.time).format("dddd, MMMM Do YYYY, h:mm a"),
-      req.body.description,
-      req.body.desiredNumOfParticipants,
-      req.body.attendees)
-
+    const event = this.service.createEvent(uuidv4(), req.body)
     return this.repository.createEvent(event).then(() => event.id)
+  }
+
+  async updateEvent(req: any): Promise<boolean> {
+    const event = this.service.createEvent(req.params.eventId, req.body)
+    return this.repository.updateEvent(event)
   }
 
   getEvent(req: any): Promise<Event> {
