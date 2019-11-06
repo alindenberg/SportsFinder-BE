@@ -1,0 +1,21 @@
+version: "2"
+services: 
+  sportsfinder:
+    container_name: sportsfinder
+    restart: always
+    build: .
+    image: sportsfinder
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo
+    volumes: 
+      - 'sportsfinder:/data/db'
+    ports: 
+      - "27017:27017"
+volumes:
+  sportsfinder:
