@@ -6,7 +6,7 @@ export default class {
   userCollection: Collection
   constructor() {
     initDb().then(() => {
-      this.userCollection = getCollection('user')
+      this.userCollection = getCollection('users')
       this.userCollection.createIndex('username', { unique: true })
     })
   }
@@ -24,5 +24,9 @@ export default class {
       }
       throw Error(err)
     })
+  }
+
+  deleteUser(userId: String) {
+    return this.userCollection.deleteOne({ id: userId })
   }
 }
