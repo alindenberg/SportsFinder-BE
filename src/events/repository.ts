@@ -32,4 +32,12 @@ export default class EventRepository {
       }
     })
   }
+
+  deleteEvent(eventId: String): Promise<void> {
+    return this.collection.deleteOne({ id: eventId }).then((res) => {
+      if (res.deletedCount != 1) {
+        throw new CustomError(404, `Could not find event to delete with id: ${eventId}`)
+      }
+    })
+  }
 }

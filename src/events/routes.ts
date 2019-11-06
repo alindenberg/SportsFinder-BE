@@ -42,4 +42,14 @@ router.put('/events/:eventId', async (req, res) => {
   }
 })
 
+router.delete('/events/:eventId', async (req, res) => {
+  try {
+    await controller.deleteEvent(req).then(() => {
+      res.sendStatus(200)
+    })
+  } catch (err) {
+    res.status(400).send(format_error(err))
+  }
+})
+
 export default router

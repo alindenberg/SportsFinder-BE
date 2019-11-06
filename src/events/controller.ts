@@ -25,4 +25,8 @@ export default class {
   getEvent(req: any): Promise<Event> {
     return this.repository.getEvent(req.params.eventId)
   }
+
+  deleteEvent(req: any): Promise<void> {
+    return this.repository.deleteEvent(req.params.eventId)
+  }
 }
