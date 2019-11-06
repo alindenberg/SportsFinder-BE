@@ -5,6 +5,7 @@ export default class Event {
   time: String
   description: String
   desiredNumOfParticipants: Number
+  creatorId: String
   attendees: String[]
 
   constructor(
@@ -14,6 +15,7 @@ export default class Event {
     time: String,
     description: String,
     desiredNumOfParticipants: Number,
+    creatorId: String,
     attendees: String[]) {
     this.id = id
     this.name = name
@@ -21,6 +23,7 @@ export default class Event {
     this.time = time
     this.description = description
     this.desiredNumOfParticipants = desiredNumOfParticipants
+    this.creatorId = creatorId
     this.attendees = attendees
   }
 }

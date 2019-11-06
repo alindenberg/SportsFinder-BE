@@ -1,7 +1,7 @@
 import express from 'express'
 import EventsController from './controller'
-import { format_error, format_error_message } from '../shared/service'
-import { CustomError } from '../shared/models'
+import handle_error from '../shared/service'
+import { CustomError, CustomErrorArray } from '../shared/models'
 
 const router = express.Router()
 const controller = new EventsController()
@@ -12,7 +12,7 @@ router.post('/events', async (req, res) => {
       res.status(201).send({ id: eventId })
     })
   } catch (err) {
-    res.status(400).send(format_error(err))
+    handle_error(res, err)
   }
 })
 
@@ -22,10 +22,7 @@ router.get('/events/:eventId', async (req, res) => {
       res.status(200).send(event)
     })
   } catch (err) {
-    if (err instanceof CustomError) {
-      res.status(err.code).send(format_error_message(err.message))
-    }
-    res.status(400).send(format_error(err))
+    handle_error(res, err)
   }
 })
 
@@ -35,10 +32,7 @@ router.put('/events/:eventId', async (req, res) => {
       res.sendStatus(200)
     })
   } catch (err) {
-    if (err instanceof CustomError) {
-      res.status(err.code).send(format_error_message(err.message))
-    }
-    res.status(400).send(format_error(err))
+    handle_error(res, err)
   }
 })
 
@@ -48,7 +42,7 @@ router.delete('/events/:eventId', async (req, res) => {
       res.sendStatus(200)
     })
   } catch (err) {
-    res.status(400).send(format_error(err))
+    handle_error(res, err)
   }
 })
 

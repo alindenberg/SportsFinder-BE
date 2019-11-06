@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import uuidv4 from 'uuid/v4'
 import User from './models'
 import UserRepository from './repository'
+import { CustomError } from '../shared/models'
 
 export default class {
   repository: UserRepository
@@ -14,7 +15,11 @@ export default class {
     if (!userId) {
       throw Error("No user id supplied")
     }
-    return this.repository.getUser(userId)
+    return this.repository.getUser(userId).then(user => {
+      if (user == null) {
+        throw new CustomError(404, `No user found for id ${userId}`)
+      }
+    })
   }
 
   createUser(req: any) {
