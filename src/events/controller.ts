@@ -17,7 +17,7 @@ export default class {
     return this.repository.createEvent(event).then(() => event.id)
   }
 
-  async updateEvent(req: any): Promise<boolean> {
+  async updateEvent(req: any): Promise<void> {
     const event = this.service.createEvent(req.params.eventId, req.body)
     return this.repository.updateEvent(event)
   }
