@@ -18,7 +18,7 @@ export default class {
       id,
       requestBody.name,
       location,
-      moment(requestBody.time).format("dddd, MMMM Do YYYY, h:mm a"),
+      moment(requestBody.time).format(),
       requestBody.description,
       requestBody.desiredNumOfParticipants,
       requestBody.creatorId,
@@ -42,8 +42,8 @@ export default class {
     if (!event.creatorId) {
       errors.push('Event must have a creator associated with it')
     }
-    if (!event.time || moment(event.time).diff(moment.now(), 'minutes') < 0) {
-      errors.push('Event must have a start time in the future')
+    if (!event.time || moment(event.time).diff(moment.now(), 'minutes') < 60) {
+      errors.push('Event must have a start time  at least 1 hour from now.')
     }
     if (!event.location || !event.location.zipCode || !event.location.name) {
       errors.push('Event location must have a zip code and name.')
