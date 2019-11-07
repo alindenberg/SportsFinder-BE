@@ -14,6 +14,11 @@ export default class {
       bodyLocation.city,
       bodyLocation.state)
 
+    let errors = this.validateLocation(location)
+    if (errors.length > 0) {
+      throw new CustomErrorArray(400, errors)
+    }
+
     const event = new Event(
       id,
       requestBody.name,
@@ -24,7 +29,7 @@ export default class {
       requestBody.creatorId,
       requestBody.attendees)
 
-    const errors = this.validateEvent(event)
+    errors = this.validateEvent(event)
     if (errors.length > 0) {
       throw new CustomErrorArray(400, errors)
     }
@@ -45,7 +50,13 @@ export default class {
     if (!event.time || moment(event.time).diff(moment.now(), 'minutes') < 60) {
       errors.push('Event must have a start time  at least 1 hour from now.')
     }
-    if (!event.location || !event.location.zipCode || !event.location.name) {
+
+    return errors
+  }
+
+  private validateLocation(location: Location): String[] {
+    let errors = []
+    if (!location.zipCode || !location.name) {
       errors.push('Event location must have a zip code and name.')
     }
 
