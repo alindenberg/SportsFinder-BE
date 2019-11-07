@@ -1,6 +1,7 @@
-import { getCollection, initDb } from "../database"
-import { Collection } from 'mongodb'
 import User from "./models"
+import { Collection } from 'mongodb'
+import { CustomError } from "../shared/models"
+import { getCollection, initDb } from "../database"
 
 export default class {
   userCollection: Collection
@@ -23,6 +24,16 @@ export default class {
         throw Error('Username is already taken.')
       }
       throw Error(err)
+    })
+  }
+
+  updateUser(user: User) {
+    return this.userCollection.replaceOne({ id: user.id }, user).then(res => {
+      if (res.matchedCount != 1) {
+        throw new CustomError(400, `Couldn't find user ${user.id} to update`)
+      } else if (res.modifiedCount != 1) {
+        throw new CustomError(400, `Matched but failed to update user ${user.id}`)
+      }
     })
   }
 

@@ -1,16 +1,18 @@
-import crypto from 'crypto'
 import uuidv4 from 'uuid/v4'
-import User from './models'
+import UserService from './service'
 import UserRepository from './repository'
 import { CustomError } from '../shared/models'
+import { Request } from 'express'
 
 export default class {
   repository: UserRepository
+  service: UserService
   constructor() {
     this.repository = new UserRepository()
+    this.service = new UserService()
   }
 
-  getUser(req: any) {
+  getUser(req: Request) {
     const userId = req.params.userId;
     if (!userId) {
       throw Error("No user id supplied")
@@ -22,16 +24,13 @@ export default class {
     })
   }
 
-  createUser(req: any) {
-    if (req.body.username.length < 6 || req.body.username.length > 18) {
-      throw Error("Username must be between 6 and 18 characters")
-    }
-    const user = new User(
-      uuidv4().toString(),
-      req.body.username,
-      req.body.email,
-      crypto.createHash('sha256').update(req.body.password).digest("base64")
-    )
+  updateUser(req: Request) {
+    const user = this.service.createUser(req.params.userId, req.body, req.body.password)
+    return this.repository.updateUser(user)
+  }
+
+  createUser(req: Request) {
+    const user = this.service.createUser(uuidv4(), req.body)
     return this.repository.createUser(user).then(() => {
       return {
         id: user.id
@@ -39,7 +38,7 @@ export default class {
     })
   }
 
-  deleteUser(req: any) {
+  deleteUser(req: Request) {
     return this.repository.deleteUser(req.params.userId)
   }
 }

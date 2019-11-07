@@ -15,6 +15,16 @@ router.get('/users/:userId', async (req, res) => {
   }
 })
 
+router.put('/users/:userId', async (req, res) => {
+  try {
+    await controller.updateUser(req).then(() => {
+      res.sendStatus(200)
+    })
+  } catch (err) {
+    handle_error(res, err)
+  }
+})
+
 router.post('/users', async (req, res) => {
   try {
     await controller.createUser(req).then((result) => {
