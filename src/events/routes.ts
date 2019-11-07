@@ -15,6 +15,16 @@ router.post('/events', async (req, res) => {
   }
 })
 
+router.get('/events', async (req, res) => {
+  try {
+    await controller.getEvents(req).then(events => {
+      res.status(200).send(events)
+    })
+  } catch (err) {
+    handle_error(res, err)
+  }
+})
+
 router.get('/events/:eventId', async (req, res) => {
   try {
     await controller.getEvent(req).then(event => {
