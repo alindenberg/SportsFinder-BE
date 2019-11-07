@@ -42,7 +42,7 @@ export default class {
     if (!event.creatorId) {
       errors.push('Event must have a creator associated with it')
     }
-    if (!event.time || moment(event.time) < moment.now()) {
+    if (!event.time || moment(event.time).diff(moment.now(), 'minutes') < 0) {
       errors.push('Event must have a start time in the future')
     }
     if (!event.location || !event.location.zipCode || !event.location.name) {

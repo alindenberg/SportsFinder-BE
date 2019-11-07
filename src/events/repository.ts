@@ -34,9 +34,36 @@ export default class EventRepository {
   }
 
   deleteEvent(eventId: String): Promise<void> {
-    return this.collection.deleteOne({ id: eventId }).then((res) => {
+    return this.collection.deleteOne({ id: eventId }).then(res => {
       if (res.deletedCount != 1) {
         throw new CustomError(404, `Could not find event to delete with id: ${eventId}`)
+      }
+    })
+  }
+
+  addEventAttendee(eventId: String, userId: String) {
+    return this.collection.updateOne({ id: eventId }, {
+      $addToSet: {
+        'attendees': userId
+      }
+    }).then(res => {
+      if (res.matchedCount != 1) {
+        throw new CustomError(404, `No event found for id ${eventId}`)
+      }
+    })
+  }
+
+  removeEventAttendee(eventId: String, userId: String) {
+    return this.collection.updateOne({ id: eventId }, {
+      $pull: {
+        'attendees': userId
+      }
+    }).then(res => {
+      if (res.matchedCount != 1) {
+        throw new CustomError(404, `No event found for id ${eventId}`)
+      }
+      if (res.modifiedCount != 1) {
+        throw new CustomError(400, `User ${userId} was not attending event ${eventId}`)
       }
     })
   }

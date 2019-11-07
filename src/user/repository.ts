@@ -38,6 +38,10 @@ export default class {
   }
 
   deleteUser(userId: String) {
-    return this.userCollection.deleteOne({ id: userId })
+    return this.userCollection.deleteOne({ id: userId }).then((res) => {
+      if (res.deletedCount != 1) {
+        throw new CustomError(400, `Failed to delete user ${userId}`)
+      }
+    })
   }
 }

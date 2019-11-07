@@ -1,7 +1,8 @@
 import uuidv4 from 'uuid/v4'
 import EventService from './service'
-import Event, { Location } from './models'
+import Event from './models'
 import EventRepository from './repository'
+import { CustomError } from '../shared/models'
 
 export default class {
   repository: EventRepository
@@ -28,5 +29,16 @@ export default class {
 
   deleteEvent(req: any): Promise<void> {
     return this.repository.deleteEvent(req.params.eventId)
+  }
+
+  addEventAttendee(req: any): Promise<void> {
+    if (!req.body || !req.body.userId) {
+      throw new CustomError(400, 'No user id supplied to add to event')
+    }
+    return this.repository.addEventAttendee(req.params.eventId, req.body.userId)
+  }
+
+  removeEventAttendee(req: any): Promise<void> {
+    return this.repository.removeEventAttendee(req.params.eventId, req.params.userId)
   }
 }

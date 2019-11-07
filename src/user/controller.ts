@@ -14,9 +14,6 @@ export default class {
 
   getUser(req: Request) {
     const userId = req.params.userId;
-    if (!userId) {
-      throw Error("No user id supplied")
-    }
     return this.repository.getUser(userId).then(user => {
       if (user == null) {
         throw new CustomError(404, `No user found for id ${userId}`)
@@ -25,8 +22,10 @@ export default class {
   }
 
   updateUser(req: Request) {
-    const user = this.service.createUser(req.params.userId, req.body, req.body.password)
-    return this.repository.updateUser(user)
+    return this.repository.getUser(req.params.userId).then((user) => {
+      this.service.createUser(user.userId, req.body, user.password)
+      return this.repository.updateUser(user)
+    })
   }
 
   createUser(req: Request) {

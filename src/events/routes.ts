@@ -1,7 +1,6 @@
 import express from 'express'
 import EventsController from './controller'
 import handle_error from '../shared/service'
-import { CustomError, CustomErrorArray } from '../shared/models'
 
 const router = express.Router()
 const controller = new EventsController()
@@ -28,7 +27,7 @@ router.get('/events/:eventId', async (req, res) => {
 
 router.put('/events/:eventId', async (req, res) => {
   try {
-    await controller.updateEvent(req).then((foundEvent) => {
+    await controller.updateEvent(req).then(() => {
       res.sendStatus(200)
     })
   } catch (err) {
@@ -39,6 +38,26 @@ router.put('/events/:eventId', async (req, res) => {
 router.delete('/events/:eventId', async (req, res) => {
   try {
     await controller.deleteEvent(req).then(() => {
+      res.sendStatus(200)
+    })
+  } catch (err) {
+    handle_error(res, err)
+  }
+})
+
+router.post('/events/:eventId/attendees', async (req, res) => {
+  try {
+    await controller.addEventAttendee(req).then(() => {
+      res.sendStatus(201)
+    })
+  } catch (err) {
+    handle_error(res, err)
+  }
+})
+
+router.delete('/events/:eventId/attendees/:userId', async (req, res) => {
+  try {
+    await controller.removeEventAttendee(req).then(() => {
       res.sendStatus(200)
     })
   } catch (err) {
