@@ -27,8 +27,8 @@ router.put('/users/:userId', async (req, res) => {
 
 router.post('/users', async (req, res) => {
   try {
-    await controller.createUser(req).then((result) => {
-      res.status(201).send(result)
+    await controller.createUser(req).then(() => {
+      res.sendStatus(201)
     })
   } catch (err) {
     handle_error(res, err)
@@ -39,6 +39,18 @@ router.delete('/users/:userId', async (req, res) => {
   try {
     await controller.deleteUser(req).then(() => {
       res.sendStatus(200)
+    })
+  } catch (err) {
+    handle_error(res, err)
+  }
+})
+
+router.post('/login', async (req, res) => {
+  try {
+    await controller.login(req).then(token => {
+      res.status(200).send({
+        token: token
+      })
     })
   } catch (err) {
     handle_error(res, err)

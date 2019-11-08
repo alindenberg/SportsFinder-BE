@@ -1,6 +1,7 @@
 FROM node:12.6.0
 
 WORKDIR /user/src/sportsfinder
+ARG SECRET
 COPY package*.json ./
 RUN npm install
 COPY . .
@@ -10,3 +11,4 @@ CMD ["npm", "start"]
 
 ENV SPORTSFINDER_MONGO_URI=mongodb://mongo:27017
 ENV SPORTSFINDER_DB_NAME=sportsfinder
+ENV SECRET=${SECRET}

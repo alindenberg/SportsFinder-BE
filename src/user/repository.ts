@@ -44,4 +44,13 @@ export default class {
       }
     })
   }
+
+  login(email: string, password: string) {
+    return this.userCollection.findOne({ email: email }).then(user => {
+      if (!user || user.password != password) {
+        throw new CustomError(404, 'Incorrect email or password.')
+      }
+      return user.id
+    })
+  }
 }

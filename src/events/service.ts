@@ -36,7 +36,7 @@ export default class {
     return event;
   }
 
-  private validateEvent(event: Event): String[] {
+  private validateEvent(event: Event) {
     let errors: String[] = []
     if (!event.name || event.name.length < 6 || event.name.length > 40) {
       errors.push('Event must have a name between 6 and 40 characters.')

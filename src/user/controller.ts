@@ -30,14 +30,19 @@ export default class {
 
   createUser(req: Request) {
     const user = this.service.createUser(uuidv4(), req.body)
-    return this.repository.createUser(user).then(() => {
-      return {
-        id: user.id
-      }
-    })
+    return this.repository.createUser(user)
   }
 
   deleteUser(req: Request) {
     return this.repository.deleteUser(req.params.userId)
+  }
+
+  login(req: Request) {
+    return this.repository.login(
+      req.body.email,
+      this.service.hashPassword(req.body.password)
+    ).then((userId) => {
+      return this.service.generateJwt(userId)
+    })
   }
 }
