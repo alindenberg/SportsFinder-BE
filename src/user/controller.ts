@@ -18,6 +18,7 @@ export default class {
       if (user == null) {
         throw new CustomError(404, `No user found for id ${userId}`)
       }
+      return user
     })
   }
 
