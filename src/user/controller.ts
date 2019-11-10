@@ -24,14 +24,16 @@ export default class {
 
   updateUser(req: Request) {
     return this.repository.getUser(req.params.userId).then((user) => {
-      this.service.createUser(user.userId, req.body, user.password)
-      return this.repository.updateUser(user)
+      const newUser = this.service.createUser(user.id, req.body, user.password)
+      return this.repository.updateUser(newUser)
     })
   }
 
   createUser(req: Request) {
     const user = this.service.createUser(uuidv4(), req.body)
-    return this.repository.createUser(user)
+    return this.repository.createUser(user).then(() => {
+      return user.id
+    })
   }
 
   deleteUser(req: Request) {

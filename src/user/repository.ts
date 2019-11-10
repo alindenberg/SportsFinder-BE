@@ -9,6 +9,7 @@ export default class {
     initDb().then(() => {
       this.userCollection = getCollection('users')
       this.userCollection.createIndex('username', { unique: true })
+      this.userCollection.createIndex('email', { unique: true })
     })
   }
 
@@ -21,6 +22,9 @@ export default class {
   createUser(user: User) {
     return this.userCollection.insertOne(user).catch(err => {
       if (err.code == 11000) {
+        if (err.errmsg.includes('email')) {
+          throw Error('Account with email already exists.')
+        }
         throw Error('Username is already taken.')
       }
       throw Error(err)
@@ -34,6 +38,14 @@ export default class {
       } else if (res.modifiedCount != 1) {
         throw new CustomError(400, `Matched but failed to update user ${user.id}`)
       }
+    }).catch(err => {
+      if (err.code == 11000) {
+        if (err.errmsg.includes('email')) {
+          throw Error('Account with email already exists.')
+        }
+        throw Error('Username is already taken.')
+      }
+      throw Error(err)
     })
   }
 
