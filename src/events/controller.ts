@@ -28,8 +28,11 @@ export default class {
   }
 
   getEvents(req: any): Promise<Event[]> {
-    if (!req.query.zipCode) {
-      throw new CustomError(400, 'No zip code provided in event search')
+    if (req.query.userId) {
+      return this.repository.getUserEvents(req.query.userId)
+    }
+    else if (!req.query.zipCode) {
+      throw new CustomError(400, 'No zip code provided for event search')
     }
     let zipCodes: String[] = [req.query.zipCode]
     //TODO - logic to get surrounding zip codes for wider search

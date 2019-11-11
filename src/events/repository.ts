@@ -29,6 +29,15 @@ export default class EventRepository {
     return this.collection.find({ 'location.zipCode': { $in: zipCodes } }).toArray()
   }
 
+  getUserEvents(userId: String) {
+    return this.collection.find({
+      $or: [
+        { 'attendees': userId },
+        { 'creatorId': userId }
+      ]
+    }).toArray()
+  }
+
   updateEvent(event: Event): Promise<void> {
     return this.collection.replaceOne({ id: event.id }, event).then((result) => {
       if (result.matchedCount != 1) {
