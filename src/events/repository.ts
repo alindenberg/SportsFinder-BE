@@ -25,7 +25,7 @@ export default class EventRepository {
     })
   }
 
-  getEvents(zipCodes: Number[]) {
+  getEvents(zipCodes: String[]) {
     return this.collection.find({ 'location.zipCode': { $in: zipCodes } }).toArray()
   }
 
@@ -45,29 +45,12 @@ export default class EventRepository {
     })
   }
 
-  addEventAttendee(eventId: String, userId: String) {
+  postEventAttendees(eventId: String, attendees: string[]) {
     return this.collection.updateOne({ id: eventId }, {
-      $addToSet: {
-        'attendees': userId
-      }
+      $set: { attendees: attendees }
     }).then(res => {
       if (res.matchedCount != 1) {
         throw new CustomError(404, `No event found for id ${eventId}`)
-      }
-    })
-  }
-
-  removeEventAttendee(eventId: String, userId: String) {
-    return this.collection.updateOne({ id: eventId }, {
-      $pull: {
-        'attendees': userId
-      }
-    }).then(res => {
-      if (res.matchedCount != 1) {
-        throw new CustomError(404, `No event found for id ${eventId}`)
-      }
-      if (res.modifiedCount != 1) {
-        throw new CustomError(400, `User ${userId} was not attending event ${eventId}`)
       }
     })
   }

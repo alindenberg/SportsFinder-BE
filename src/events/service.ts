@@ -36,6 +36,20 @@ export default class {
     return event;
   }
 
+  validateAttendees(attendees: string[]) {
+    //validate uuid format of attendees
+    let errors: string[] = []
+    for (let i = 0; i < attendees.length; i++) {
+      console.log("Attendees ", attendees)
+      if (!(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i).test(attendees[i])) {
+        errors.push(`${attendees[i]} is not a valid uuid`)
+      }
+    }
+    if (errors.length > 0) {
+      throw new CustomErrorArray(400, errors)
+    }
+  }
+
   private validateEvent(event: Event) {
     let errors: String[] = []
     if (!event.name || event.name.length < 6 || event.name.length > 40) {

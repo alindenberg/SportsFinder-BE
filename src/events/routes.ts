@@ -57,18 +57,8 @@ router.delete('/events/:eventId', async (req, res) => {
 
 router.post('/events/:eventId/attendees', async (req, res) => {
   try {
-    await controller.addEventAttendee(req).then(() => {
+    await controller.postEventAttendees(req).then(() => {
       res.sendStatus(201)
-    })
-  } catch (err) {
-    handle_error(res, err)
-  }
-})
-
-router.delete('/events/:eventId/attendees/:userId', async (req, res) => {
-  try {
-    await controller.removeEventAttendee(req).then(() => {
-      res.sendStatus(200)
     })
   } catch (err) {
     handle_error(res, err)

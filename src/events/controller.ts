@@ -31,7 +31,7 @@ export default class {
     if (!req.query.zipCode) {
       throw new CustomError(400, 'No zip code provided in event search')
     }
-    let zipCodes: Number[] = [Number(req.query.zipCode)]
+    let zipCodes: String[] = [req.query.zipCode]
     //TODO - logic to get surrounding zip codes for wider search
     return this.repository.getEvents(zipCodes)
   }
@@ -40,14 +40,11 @@ export default class {
     return this.repository.deleteEvent(req.params.eventId)
   }
 
-  addEventAttendee(req: any): Promise<void> {
-    if (!req.body || !req.body.userId) {
-      throw new CustomError(400, 'No user id supplied to add to event')
+  postEventAttendees(req: any): Promise<void> {
+    if (!req.body) {
+      throw new CustomError(400, 'No user ids supplied to add to event')
     }
-    return this.repository.addEventAttendee(req.params.eventId, req.body.userId)
-  }
-
-  removeEventAttendee(req: any): Promise<void> {
-    return this.repository.removeEventAttendee(req.params.eventId, req.params.userId)
+    this.service.validateAttendees(req.body.attendees)
+    return this.repository.postEventAttendees(req.params.eventId, req.body.attendees)
   }
 }
