@@ -30,12 +30,12 @@ export default class Event {
 
 export class Location {
   name: String
-  zipCode: Number
+  zipCode: String
   streetAddress: String
   city: String
   state: String
 
-  constructor(name: String, zipCode: Number, streetAddress?: String, city?: String, state?: String) {
+  constructor(name: String, zipCode: String, streetAddress?: String, city?: String, state?: String) {
     this.name = name
     this.zipCode = zipCode
     this.streetAddress = streetAddress

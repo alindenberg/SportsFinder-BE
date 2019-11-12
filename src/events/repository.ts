@@ -25,8 +25,14 @@ export default class EventRepository {
     })
   }
 
-  getEvents(zipCodes: String[]) {
-    return this.collection.find({ 'location.zipCode': { $in: zipCodes } }).toArray()
+  getEvents(zipCode: String) {
+    let filter = {}
+    if (zipCode) {
+      filter = {
+        'location.zipCode': zipCode
+      }
+    }
+    return this.collection.find(filter).toArray()
   }
 
   getUserEvents(userId: String) {

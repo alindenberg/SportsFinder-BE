@@ -31,12 +31,8 @@ export default class {
     if (req.query.userId) {
       return this.repository.getUserEvents(req.query.userId)
     }
-    else if (!req.query.zipCode) {
-      throw new CustomError(400, 'No zip code provided for event search')
-    }
-    let zipCodes: String[] = [req.query.zipCode]
     //TODO - logic to get surrounding zip codes for wider search
-    return this.repository.getEvents(zipCodes)
+    return this.repository.getEvents(req.query.zipCode)
   }
 
   deleteEvent(req: any): Promise<void> {
