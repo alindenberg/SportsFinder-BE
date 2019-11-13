@@ -12,8 +12,7 @@ export default class {
       id,
       reqBody.username,
       reqBody.email,
-      password ? password : this.hashPassword(reqBody.password),
-      reqBody.zipCode
+      password ? password : this.hashPassword(reqBody.password)
     )
 
     const errors = this.validateUser(user)
@@ -39,10 +38,6 @@ export default class {
     }
     if (!emailValidator.validate(user.email.toString())) {
       errors.push('Invalid email supplied')
-    }
-    if (!user.zipCode) {
-      errors.push('Must supply zip code.')
-      //TODO - validate zipCode exists
     }
     return errors
   }

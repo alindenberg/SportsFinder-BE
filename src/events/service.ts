@@ -23,7 +23,7 @@ export default class {
       id,
       requestBody.name,
       location,
-      moment(requestBody.time).format(),
+      requestBody.time,
       requestBody.description,
       requestBody.desiredNumOfParticipants,
       requestBody.creatorId,
@@ -40,7 +40,6 @@ export default class {
     //validate uuid format of attendees
     let errors: string[] = []
     for (let i = 0; i < attendees.length; i++) {
-      console.log("Attendees ", attendees)
       if (!(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i).test(attendees[i])) {
         errors.push(`${attendees[i]} is not a valid uuid`)
       }
@@ -61,7 +60,7 @@ export default class {
     if (!event.creatorId) {
       errors.push('Event must have a creator associated with it')
     }
-    if (!event.time || moment(event.time).diff(moment.now(), 'minutes') < 60) {
+    if (!event.time || moment(event.time).utc().diff(moment.utc(), 'minutes') < 60) {
       errors.push('Event must have a start time  at least 1 hour from now.')
     }
 

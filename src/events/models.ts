@@ -35,7 +35,7 @@ export class Location {
   city: String
   state: String
 
-  constructor(name: String, zipCode: String, streetAddress?: String, city?: String, state?: String) {
+  constructor(name: String, zipCode: String, streetAddress: String, city: String, state: String) {
     this.name = name
     this.zipCode = zipCode
     this.streetAddress = streetAddress
