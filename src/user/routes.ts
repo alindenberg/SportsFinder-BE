@@ -1,11 +1,11 @@
 import express from 'express'
 import UserController from './controller'
-import handle_error from '../shared/service'
+import { handle_error, validateJwt } from '../shared/service'
 
 const router = express.Router()
 const controller = new UserController()
 
-router.get('/users/:userId', async (req, res) => {
+router.get('/users/:userId', validateJwt, async (req, res) => {
   try {
     await controller.getUser(req).then(user => {
       res.status(200).send(user)
@@ -15,7 +15,7 @@ router.get('/users/:userId', async (req, res) => {
   }
 })
 
-router.put('/users/:userId', async (req, res) => {
+router.put('/users/:userId', validateJwt, async (req, res) => {
   try {
     await controller.updateUser(req).then(() => {
       res.sendStatus(200)
@@ -35,7 +35,7 @@ router.post('/users', async (req, res) => {
   }
 })
 
-router.delete('/users/:userId', async (req, res) => {
+router.delete('/users/:userId', validateJwt, async (req, res) => {
   try {
     await controller.deleteUser(req).then(() => {
       res.sendStatus(200)

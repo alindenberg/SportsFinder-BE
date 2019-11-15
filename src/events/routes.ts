@@ -1,11 +1,11 @@
 import express from 'express'
 import EventsController from './controller'
-import handle_error from '../shared/service'
+import { handle_error, validateJwt } from '../shared/service'
 
 const router = express.Router()
 const controller = new EventsController()
 
-router.post('/events', async (req, res) => {
+router.post('/events', validateJwt, validateJwt, async (req, res) => {
   try {
     await controller.createEvent(req).then(eventId => {
       res.status(201).send({ id: eventId })
@@ -15,7 +15,7 @@ router.post('/events', async (req, res) => {
   }
 })
 
-router.get('/events', async (req, res) => {
+router.get('/events', validateJwt, async (req, res) => {
   try {
     await controller.getEvents(req).then(events => {
       res.status(200).send(events)
@@ -25,7 +25,7 @@ router.get('/events', async (req, res) => {
   }
 })
 
-router.get('/events/:eventId', async (req, res) => {
+router.get('/events/:eventId', validateJwt, async (req, res) => {
   try {
     await controller.getEvent(req).then(event => {
       res.status(200).send(event)
@@ -35,7 +35,7 @@ router.get('/events/:eventId', async (req, res) => {
   }
 })
 
-router.put('/events/:eventId', async (req, res) => {
+router.put('/events/:eventId', validateJwt, async (req, res) => {
   try {
     await controller.updateEvent(req).then(() => {
       res.sendStatus(200)
@@ -45,7 +45,7 @@ router.put('/events/:eventId', async (req, res) => {
   }
 })
 
-router.delete('/events/:eventId', async (req, res) => {
+router.delete('/events/:eventId', validateJwt, async (req, res) => {
   try {
     await controller.deleteEvent(req).then(() => {
       res.sendStatus(200)
@@ -55,7 +55,7 @@ router.delete('/events/:eventId', async (req, res) => {
   }
 })
 
-router.post('/events/:eventId/attendees', async (req, res) => {
+router.post('/events/:eventId/attendees', validateJwt, async (req, res) => {
   try {
     await controller.postEventAttendees(req).then(() => {
       res.sendStatus(201)

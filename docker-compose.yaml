@@ -4,7 +4,7 @@ services:
     container_name: sportsfinder
     restart: always
     build: .
-    image: sportsfinder:1.0
+    image: sportsfinder
     ports:
       - "3000:3000"
     links:

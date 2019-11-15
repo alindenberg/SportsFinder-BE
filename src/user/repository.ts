@@ -14,7 +14,7 @@ export default class {
   }
 
   getUser(userId: String) {
-    return this.userCollection.findOne({ id: userId }).catch(err => {
+    return this.userCollection.findOne({ $or: [{ id: userId }, { email: userId }] }).catch(err => {
       throw Error(err)
     })
   }
@@ -63,6 +63,14 @@ export default class {
         throw new CustomError(404, 'Incorrect email or password.')
       }
       return user.id
+    })
+  }
+
+  updatePassword(email: string, password: string) {
+    return this.userCollection.updateOne({ email: email }, { $set: { password: password } }).then(res => {
+      if (res.matchedCount == 0) {
+        throw new CustomError(404, 'Did not find user with email to update password for.')
+      }
     })
   }
 }

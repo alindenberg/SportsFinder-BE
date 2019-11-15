@@ -3,6 +3,7 @@ import User from './models'
 import jwt from 'jsonwebtoken'
 import { CustomErrorArray } from '../shared/models'
 import * as emailValidator from 'email-validator'
+const moment = require('moment-timezone')
 
 export default class {
   constructor() { }
@@ -28,7 +29,7 @@ export default class {
   }
 
   generateJwt(userId: string) {
-    return jwt.sign({ id: userId }, process.env.SECRET, { expiresIn: "1h" })
+    return jwt.sign({ exp: moment.utc().add(1, 'hour').valueOf(), id: userId }, process.env.SECRET)
   }
 
   private validateUser(user: User): String[] {
