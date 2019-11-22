@@ -34,13 +34,11 @@ function format_error_array(errors: String[]) {
 export function validateJwt(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.token
   if (!token) {
-    console.log("No token provided")
-    handle_error(res, new CustomError(401, 'No token provided'))
+    handle_error(res, new CustomError(401, 'No user logged in.'))
   } else {
-    console.log("Token provided ", token)
     const decodedToken: any = jwt.verify(String(token), process.env.SECRET)
     if (moment(decodedToken.exp).utc().isBefore(moment().utc())) {
-      handle_error(res, new CustomError(401, 'Session token is expired'))
+      handle_error(res, new CustomError(401, 'Session is expired'))
     } else {
       next()
     }

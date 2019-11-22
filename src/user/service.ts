@@ -29,7 +29,7 @@ export default class {
   }
 
   generateJwt(userId: string) {
-    return jwt.sign({ exp: moment.utc().add(1, 'hour').valueOf(), id: userId }, process.env.SECRET)
+    return jwt.sign({ exp: moment.utc().add(6, 'hour').valueOf(), id: userId }, process.env.SECRET)
   }
 
   private validateUser(user: User): String[] {

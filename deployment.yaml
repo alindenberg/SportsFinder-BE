@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sportsfinder-deployment
+  labels:
+    app: sportsfinder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sportsfinder
+  template:
+    metadata:
+      labels:
+        app: sportsfinder
+    spec:
+      containers:
+      - name: sportsfinder
+        image: gcr.io/sports-finder-1573562620564/sportsfinder:1.2
+        ports:
+        - name: web
+          containerPort: 3000
+          protocol: TCP
