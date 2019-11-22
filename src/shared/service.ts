@@ -35,12 +35,19 @@ export function validateJwt(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.token
   if (!token) {
     handle_error(res, new CustomError(401, 'No user logged in.'))
+    return
+
+  }
+  let decodedToken: any
+  try {
+    jwt.verify(String(token), process.env.SECRET)
+  } catch (err) {
+    handle_error(res, new CustomError(400, err.message))
+    return
+  }
+  if (moment(decodedToken.exp).utc().isBefore(moment().utc())) {
+    handle_error(res, new CustomError(401, 'Session is expired'))
   } else {
-    const decodedToken: any = jwt.verify(String(token), process.env.SECRET)
-    if (moment(decodedToken.exp).utc().isBefore(moment().utc())) {
-      handle_error(res, new CustomError(401, 'Session is expired'))
-    } else {
-      next()
-    }
+    next()
   }
 }
