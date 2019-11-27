@@ -29,9 +29,8 @@ export default class {
 
   getEvents(req: any): Promise<Event[]> {
     if (req.query.userId) {
-      return this.repository.getUserEvents(req.query.userId)
+      return this.repository.getUserEvents(req.query.userId, req.query.pastEvents)
     }
-    //TODO - logic to get surrounding zip codes for wider search
     return this.repository.getEvents(req.query.zipCode)
   }
 

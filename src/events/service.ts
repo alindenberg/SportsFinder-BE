@@ -23,7 +23,7 @@ export default class {
       id,
       requestBody.name,
       location,
-      requestBody.time,
+      new Date(requestBody.time),
       requestBody.description,
       requestBody.desiredNumOfParticipants,
       requestBody.creatorId,

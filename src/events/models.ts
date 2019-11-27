@@ -2,7 +2,7 @@ export default class Event {
   id: String
   name: String
   location: Location
-  time: String
+  time: Date
   description: String
   desiredNumOfParticipants: Number
   creatorId: String
@@ -12,7 +12,7 @@ export default class Event {
     id: String,
     name: String,
     location: Location,
-    time: String,
+    time: Date,
     description: String,
     desiredNumOfParticipants: Number,
     creatorId: String,

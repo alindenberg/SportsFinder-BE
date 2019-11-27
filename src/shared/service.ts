@@ -40,7 +40,7 @@ export function validateJwt(req: Request, res: Response, next: NextFunction) {
   }
   let decodedToken: any
   try {
-    jwt.verify(String(token), process.env.SECRET)
+    decodedToken = jwt.verify(String(token), process.env.SECRET)
   } catch (err) {
     handle_error(res, new CustomError(400, err.message))
     return

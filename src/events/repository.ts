@@ -1,3 +1,4 @@
+const moment = require('moment-timezone')
 import Event from './models'
 import { Collection } from 'mongodb'
 import { CustomError } from '../shared/models'
@@ -26,22 +27,30 @@ export default class EventRepository {
   }
 
   getEvents(zipCode: String) {
-    let filter = {}
+    let filter: any = {
+      time: { '$gte': new Date(moment.utc().format()) }
+    }
     if (zipCode) {
-      filter = {
-        'location.zipCode': zipCode
-      }
+      filter['location.zipCode'] = zipCode
     }
     return this.collection.find(filter).toArray()
   }
 
-  getUserEvents(userId: String) {
-    return this.collection.find({
+  getUserEvents(userId: String, pastEvents: String) {
+    let filter: any = {
       $or: [
         { 'attendees': userId },
         { 'creatorId': userId }
-      ]
-    }).toArray()
+      ],
+      time: { '$gte': new Date(moment.utc().format()) }
+    }
+    if (pastEvents === 'true') {
+      console.log("Adding past events filter")
+      filter['time'] = {
+        '$lt': new Date(moment.utc().format())
+      }
+    }
+    return this.collection.find(filter).toArray()
   }
 
   updateEvent(event: Event): Promise<void> {
